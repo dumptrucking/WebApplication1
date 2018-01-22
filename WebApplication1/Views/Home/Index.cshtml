@@ -1,0 +1,224 @@
+﻿@model WebApplication1.Models.RichesModel
+@{
+    ViewBag.Title = "$$$ Riches Bitches $$$";
+}
+<style>
+    .beefy {
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .spacer {
+        height: 20px;
+    }
+
+    .spacer-mini {
+        height: 5px;
+    }
+
+    .spacer-small {
+        height: 10px;
+    }
+
+    .spacer-large {
+        height: 30px;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        @*$(".modes").on("click", function () {
+            alert($(this).val());
+            if ($(this).val() == "@WebApplication1.Models.ModeTypes.RandomData"){
+                randomMode(true);
+            }
+            else {
+                randomMode(false);
+            }
+        });
+
+        if ("@Model.ToolMode" == "@WebApplication1.Models.ModeTypes.RandomData"){
+            randomMode(true);
+        };
+
+        function randomMode(bool) {
+            if (bool) {
+                $(".numpings").show();
+                $(".pairs").hide();
+            }
+            else {
+                $(".numpings").hide();
+                $(".pairs").show();
+            }
+        };*@
+    });
+</script>
+<div class="col-xs-12">
+    <h1>@Model.TradingPair</h1>
+    <div class="spacer-large"></div>
+
+    @{Html.RenderAction("Visualize"); }
+
+    <div class="spacer-large"></div>
+    <div class="row">
+        @using (Html.BeginForm())
+        {
+            <div class="col-xs-4">
+                <div class="well well-lg beefy">
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                            <label class="modes">
+                                <input type="radio" name="ToolMode" value="@WebApplication1.Models.ModeTypes.HistoricalData"
+                                       @(Model.ToolMode == WebApplication1.Models.ModeTypes.HistoricalData ? "checked" : "") /> Historical Data
+                            </label>&nbsp;&nbsp;&nbsp;
+                            <label class="modes">
+                                <input type="radio" name="ToolMode" value="@WebApplication1.Models.ModeTypes.RandomData"
+                                       @(Model.ToolMode == WebApplication1.Models.ModeTypes.RandomData ? "checked" : "") /> Random Data
+                            </label>&nbsp;&nbsp;&nbsp;
+                            <label class="modes">
+                                <input type="radio" name="ToolMode" value="@WebApplication1.Models.ModeTypes.LiveData"
+                                       @(Model.ToolMode == WebApplication1.Models.ModeTypes.LiveData ? "checked" : "") /> Live Data
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="row numpings">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.NumberOfPings, new { @class = "col-xs-6 control-label" })
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(x => x.NumberOfPings, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.StartingBaseAmount, new { @class = "col-xs-6 control-label" })
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(x => x.StartingBaseAmount, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.DecisionTypeId, new { @class = "col-xs-6 control-label" })
+                            <div class="col-xs-6">
+                                <select id=DecisionTypeId name=DecisionTypeId class="form-control">
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.All ? "selected" : "") value=All>All</option>
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.SumOfLastThree ? "selected" : "") value=SumOfLastThree>SumOfLastThree</option>
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.TrendOfLastThree ? "selected" : "") value=TrendOfLastThree>TrendOfLastThree</option>
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.ComparedToFour ? "selected" : "") value=ComparedToFour>ComparedToFour</option>
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.ThreeOfFive ? "selected" : "") value=ThreeOfFive>ThreeOfFive</option>
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.ComparedToAvg ? "selected" : "") value=ComparedToAvg>ComparedToAvg</option>
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.PercentClimb ? "selected" : "") value=PercentClimb>PercentClimb</option>
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.PercentClimb2 ? "selected" : "") value=PercentClimb2>PercentClimb2</option>
+                                    <option @(Model.DecisionTypeId == WebApplication1.Models.DecisionTypes.PercentClimb3 ? "selected" : "") value=PercentClimb3>PercentClimb3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pairs">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.TradingPair, new { @class = "col-xs-6 control-label" })
+                            <div class="col-xs-6">
+                                <select id=TradingPair name=TradingPair class="form-control">
+                                    @foreach (var pair in Model.TradingPairs)
+                                    {
+                                        <option @(Model.TradingPair == pair ? "selected" : "") value=@pair>@pair</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="spacer-mini"></div>
+                    <div class="pull pull-right">
+                        <input type="submit" class="btn btn-primary" value="Simulate" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        }
+    </div>
+    @if (Model.History.Pings.Any())
+    {
+        <div class="col-xs-12">
+            <div class="row">
+                <h2>Starting (BaseHeld) : @Model.History.Pings.First().BaseHeld</h2>
+                <h2>
+                    Result (BaseHeld) : @Math.Round(Model.History.Pings.Last().BaseHeld, 2)
+                    &nbsp;&nbsp;&nbsp;&nbsp; Profit :
+                    <span class="@(Model.History.Pings.Last().BaseHeld - Model.History.Pings.First().BaseHeld > 0 ? "text-success" : "text-danger")">
+                        @Math.Round(((Model.History.Pings.Last().BaseHeld - Model.History.Pings.First().BaseHeld) / Model.History.Pings.First().BaseHeld) * 100, 2) %
+                    </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp; Price Change :
+                    <span class="@((Model.History.Pings.Last().LowestSell - Model.History.Pings.First().LowestSell) > 0 ? "text-success" : "text-danger")">
+                        @Math.Round(((Model.History.Pings.Last().LowestSell - Model.History.Pings.First().LowestSell) / Model.History.Pings.First().LowestSell) * 100, 2) %
+                    </span>
+                </h2>
+            </div>
+            <div class="row">
+                <h3>
+                    <span class="col-xs-1">
+                        Ping Time
+                    </span>
+                    <span class="col-xs-1">
+                        Highest Buy
+                    </span>
+                    <span class="col-xs-1">
+                        Lowest Sell
+                    </span>
+                    <span class="col-xs-1">
+                        Volume
+                    </span>
+                    <span class="col-xs-1">
+                        Change
+                    </span>
+                    <span class="col-xs-1">
+                        Percent Change
+                    </span>
+                    <span class="col-xs-1">
+                        Base Held
+                    </span>
+                    <span class="col-xs-1">
+                        Alt Held
+                    </span>
+                </h3>
+            </div>
+            <br />
+            @foreach (var ping in Model.History.Pings)
+            {
+                <div class="row">
+                    <div class="beefy @(ping.AltHeld > 0 ? "text-success" : "text-danger")">
+                        <span class="col-xs-1">
+                            @ping.PingDate.ToShortTimeString();
+                        </span>
+                        <span class="col-xs-1">
+                            @ping.HighestBuy
+                        </span>
+                        <span class="col-xs-1">
+                            @ping.LowestSell
+                        </span>
+                        <span class="col-xs-1">
+                            @Math.Round(ping.Volume, 2)
+                        </span>
+                        <span class="col-xs-1">
+                            @Math.Round(ping.NumericChangeInLowestSell, 8).ToString("0.############################")
+                        </span>
+                        <span class="col-xs-1">
+                            @Math.Round(ping.PercentChangeInLowestSell, 8).ToString("0.############################")
+                        </span>
+                        <span class="col-xs-1">
+                            @Math.Round(ping.BaseHeld, 2)
+                        </span>
+                        <span class="col-xs-1">
+                            @Math.Round(ping.AltHeld, 2)
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+
